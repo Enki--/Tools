@@ -32,6 +32,6 @@ elif(stealth_scan_resp.haslayer(ICMP)):
 
 
 
-p = subprocess.Popen(["iptables", "-D", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", -s dst_ip, "-j" "DROP"], stdout=subprocess.PIPE)
+p = subprocess.Popen(["iptables", "-D", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", "-s" dst_ip, "-j" "DROP"], stdout=subprocess.PIPE)
         output , err = p.communicate()
         print output
