@@ -13,7 +13,7 @@ dst_port=80
 set_ttl=128
 
 
-p = subprocess.Popen(["iptables", "-A", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", -s dst_ip, "-j" "DROP"], stdout=subprocess.PIPE)
+p = subprocess.Popen(["iptables", "-A", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", "-s" dst_ip, "-j" "DROP"], stdout=subprocess.PIPE)
         output , err = p.communicate()
         print output
 
