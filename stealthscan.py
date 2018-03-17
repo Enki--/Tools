@@ -7,8 +7,10 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 import subprocess
 from scapy.all import sr, sr1, IP, TCP, RandShort
 
+#import argparse
+
 dst_ip = "216.58.219.36"
-src_port = 2525
+src_port = int(RandShort)
 dst_port=80
 set_ttl=128
 
