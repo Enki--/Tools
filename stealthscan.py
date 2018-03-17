@@ -12,10 +12,7 @@ src_port = 2525
 dst_port=80
 set_ttl=128
 
-
 p = subprocess.Popen(["iptables", "-A", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", "-d", dst_ip, "-j" "DROP"], stdout=subprocess.PIPE)
-output , err = p.communicate()
-print(output)
 
 stealth_scan_resp = sr1(IP(dst=dst_ip,ttl=set_ttl)/TCP(sport=src_port,dport=dst_port,flags="S"),timeout=2, verbose=False)
 if(str(type(stealth_scan_resp))=="<type 'NoneType'>"):
@@ -30,9 +27,4 @@ elif(stealth_scan_resp.haslayer(ICMP)):
     if(int(stealth_scan_resp.getlayer(ICMP).type)==3 and int(stealth_scan_resp.getlayer(ICMP).code) in [1,2,3,9,10,13]):
         print("Filtered")
 
-
-
 p = subprocess.Popen(["iptables", "-D", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", "-d", dst_ip, "-j" "DROP"], stdout=subprocess.PIPE)
-
-output , err = p.communicate()
-print(output)
