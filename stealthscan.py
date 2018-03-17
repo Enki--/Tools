@@ -17,12 +17,12 @@ p = subprocess.Popen(["iptables", "-A", "OUTPUT", "-p", "tcp", "--tcp-flags", "R
 output , err = p.communicate()
 print(output)
 
-stealth_scan_resp = sr1(IP(dst=dst_ip,ttl=set_ttl)/TCP(sport=src_port,dport=dst_port,flags="S"),timeout=2)
+stealth_scan_resp = sr1(IP(dst=dst_ip,ttl=set_ttl)/TCP(sport=src_port,dport=dst_port,flags="S"),timeout=2, verbose=False)
 if(str(type(stealth_scan_resp))=="<type 'NoneType'>"):
     print("Filtered")
 elif(stealth_scan_resp.haslayer(TCP)):
     if(stealth_scan_resp.getlayer(TCP).flags == 0x12):
-        send_rst = sr(IP(dst=dst_ip,ttl=set_ttl)/TCP(sport=src_port,dport=dst_port,flags="R"),timeout=2)
+        send_rst = sr(IP(dst=dst_ip,ttl=set_ttl)/TCP(sport=src_port,dport=dst_port,flags="R"),timeout=2, verbose=False)
     print("Open")
 elif (stealth_scan_resp.getlayer(TCP).flags == 0x14):
     print("Closed")
