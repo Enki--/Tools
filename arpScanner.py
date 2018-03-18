@@ -53,12 +53,6 @@ def arpScanner(IPs):
         for s, r in ans:
             result = r.sprintf("%ARP.psrc% %Ether.src%")
             returnList.append(result.split(' '))
-        # ans, unans = srp(Ether(dst="ff:ff:ff:ff:ff:ff") /
-                         # ARP(pdst=str(tgt)), timeout=2,
-                         # verbose=False)
-        # for snd, rcv in ans:
-            # rcv.sprintf(r"%ARP.psrc% - %Ether.src%")
-            # returnList.append(rcv.sprintf(r"%ARP.psrc% - %Ether.src%"))
     return returnList
 
 
