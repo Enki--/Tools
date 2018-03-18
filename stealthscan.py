@@ -47,7 +47,7 @@ def IPtoList(IPs):
 def stealthScanner(IPs, ports, ttl, scrPort, timeOut):
     scanResults = []
     if platform == 'linux':
-        p = subprocess.Popen(["iptables", "-A", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", "-d", dst_ip, "-j" "DROP"], stdout=subprocess.PIPE)
+        p = Popen(["iptables", "-A", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", "-d", dst_ip, "-j" "DROP"], stdout=subprocess.PIPE)
     if scrPort == 0:
         src_port = int(RandShort())
     for tgt in IPs:
@@ -67,7 +67,7 @@ def stealthScanner(IPs, ports, ttl, scrPort, timeOut):
                     scanResults.append([tgt, tgtPort, "Filtered"])
     return scanResults
     if platform == 'linux':
-        p = subprocess.Popen(["iptables", "-D", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", "-d", dst_ip, "-j" "DROP"], stdout=subprocess.PIPE)
+        p = Popen(["iptables", "-D", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", "-d", dst_ip, "-j" "DROP"], stdout=subprocess.PIPE)
 
 
 
