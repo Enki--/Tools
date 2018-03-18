@@ -1,7 +1,9 @@
 #! /usr/bin/python3
 
 # logging imported / used to supress ipv6 error message
+import random
 import logging
+from sys import stdout
 from argparse import ArgumentParser
 from prettytable import PrettyTable
 from scapy.all import srp, Ether, ARP
@@ -45,7 +47,9 @@ def IPtoList(IPs):
 
 def arpScanner(IPs):
     returnList = []
-    for tgt in IPs:
+    random.shuffle(IPs)
+    for index, tgt in enumerate(IPs):
+        progress(index, len(IPs), tgt)
         ans, unas = srp(Ether(dst="ff:ff:ff:ff:ff:ff") /
                         ARP(pdst=str(tgt)), timeout=2,
                         verbose=False)
@@ -53,6 +57,17 @@ def arpScanner(IPs):
             result = r.sprintf("%ARP.psrc% %Ether.src%")
             returnList.append(result.split(' '))
     return returnList
+
+
+def progress(count, total, status=''):
+    bar_len = 60
+    filled_len = int(round(bar_len * count / float(total)))
+
+    percents = round(100.0 * count / float(total), 1)
+    bar = '=' * filled_len + '-' * (bar_len - filled_len)
+
+    stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
+    stdout.flush()
 
 
 def main():
@@ -63,8 +78,9 @@ def main():
 
     returnList = arpScanner(IPtoList(args.IP))
     chart = PrettyTable()
-    print('Only systems that responded are displayed')
+    print('\n Only systems that responded are displayed')
     chart.field_names = ['IP', 'MAC']
+    returnList.sort()
     for record in returnList:
         chart.add_row(record)
     print(chart)

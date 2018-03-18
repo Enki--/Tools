@@ -1,12 +1,13 @@
 #! /usr/bin/python3
 
 # logging imported / used to supress ipv6 error message
+import random
 import logging
-from sys import platform
+from sys import platform, stdout
 from subprocess import Popen
 from argparse import ArgumentParser
 from prettytable import PrettyTable
-from scapy.all import sr, sr1, IP, TCP, RandShort
+from scapy.all import sr, sr1, IP, TCP, RandShort, ICMP
 from netaddr import valid_ipv4, iter_iprange, IPNetwork, IPAddress
 
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
@@ -49,12 +50,15 @@ def stealthScanner(IPs, ports, ttl, scrPort, timeOut):
     scanResults = []
     if scrPort == 0:
         srcPort = int(RandShort())
-    for tgt in IPs:
+    random.shuffle(IPs)
+    for index, tgt in enumerate(IPs):
         if platform == 'linux':
             p = Popen(["iptables", "-A", "OUTPUT", "-p", "tcp", "--tcp-flags",
                       "RST", "RST", "-d", str(tgt), "-j" "DROP"])
         print("working on " + str(tgt))
+        random.shuffle(ports)
         for tgtPort in ports:
+            progress(index, len(IPs)*len(ports), tgt)
             stealth_scan_resp = sr1(IP(dst=str(tgt), ttl=ttl) /
                                     TCP(sport=srcPort,
                                         dport=tgtPort,
@@ -86,6 +90,17 @@ def stealthScanner(IPs, ports, ttl, scrPort, timeOut):
     return scanResults
 
 
+def progress(count, total, status=''):
+    bar_len = 60
+    filled_len = int(round(bar_len * count / float(total)))
+
+    percents = round(100.0 * count / float(total), 1)
+    bar = '=' * filled_len + '-' * (bar_len - filled_len)
+
+    stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
+    stdout.flush()
+
+
 def main():
     parser = ArgumentParser(
         description="Basic syn scanner Syn->Syn/Ack->RST")
@@ -104,6 +119,7 @@ def main():
 
     chart = PrettyTable()
     chart.field_names = ['IP', 'Port', 'Status']
+    returnList.sort()
     for record in returnList:
         chart.add_row(record)
     print(chart)
