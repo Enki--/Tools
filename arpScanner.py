@@ -46,7 +46,6 @@ def IPtoList(IPs):
 def arpScanner(IPs):
     returnList = []
     for tgt in IPs:
-        print(".")
         ans, unas = srp(Ether(dst="ff:ff:ff:ff:ff:ff") /
                         ARP(pdst=str(tgt)), timeout=2,
                         verbose=False)
