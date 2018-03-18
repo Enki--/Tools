@@ -50,7 +50,7 @@ def stealthScanner(IPs, ports, ttl, scrPort, timeOut):
         src_port = int(RandShort())
     for tgt in IPs:
         if platform == 'linux':
-            p = Popen(["iptables", "-A", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", "-d", tgt, "-j" "DROP"], stdout=subprocess.PIPE)
+            p = Popen(["iptables", "-A", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", "-d", tgt, "-j" "DROP"], stdout=PIPE)
         print("working on " + str(tgt))
         for tgtPort in ports:
             stealth_scan_resp = sr1(IP(dst=str(tgt),ttl=ttl)/TCP(sport=scrPort,dport=tgtPort,flags="S"),timeout=timeOut, verbose=False)
@@ -66,9 +66,9 @@ def stealthScanner(IPs, ports, ttl, scrPort, timeOut):
                 if(int(stealth_scan_resp.getlayer(ICMP).type)==3 and int(stealth_scan_resp.getlayer(ICMP).code) in [1,2,3,9,10,13]):
                     scanResults.append([tgt, tgtPort, "Filtered"])
         if platform == 'linux':
-            p = Popen(["iptables", "-D", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", "-d", tgt, "-j" "DROP"], stdout=subprocess.PIPE)
+            p = Popen(["iptables", "-D", "OUTPUT", "-p", "tcp", "--tcp-flags", "RST", "RST", "-d", tgt, "-j" "DROP"], stdout=PIPE)
     return scanResults
-    
+
 
 
 
