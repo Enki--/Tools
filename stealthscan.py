@@ -2,12 +2,12 @@
 
 # logging imported / used to supress ipv6 error message
 import logging
-from subprocess import Popen
-from scapy.all import sr, sr1, IP, TCP, RandShort
-from argparse import ArgumentParser
-from netaddr import valid_ipv4, iter_iprange, IPNetwork, IPAddress
 from sys import platform
+from subprocess import Popen
+from argparse import ArgumentParser
 from prettytable import PrettyTable
+from scapy.all import sr, sr1, IP, TCP, RandShort
+from netaddr import valid_ipv4, iter_iprange, IPNetwork, IPAddress
 
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 
